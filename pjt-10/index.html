@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PJT10 - 은행 검색 애플리케이션</title>
+
+  <script src="./apikey.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 1000px;
+      margin: 0 auto;
+      border: 1px solid #999;
+    }
+
+    .header {
+      background-color: #c97845;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+    }
+
+    .map-wrapper {
+      position: relative;
+    }
+
+    #map {
+      width: 100%;
+      height: 600px;
+    }
+
+    .search-box {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 250px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      z-index: 10;
+    }
+
+    .search-box select,
+    .search-box button {
+      width: 100%;
+      height: 35px;
+      margin-bottom: 10px;
+    }
+
+    .search-box button {
+      background-color: #c97845;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    PJT10 - 은행 검색 애플리케이션
+  </div>
+
+  <div class="map-wrapper">
+
+    <div class="search-box">
+      <h3>은행 찾기</h3>
+
+      <label>광역시 / 도</label>
+      <select id="sido">
+        <option value="">광역시 / 도를 선택하세요</option>
+      </select>
+
+      <label>시 / 군 / 구</label>
+      <select id="gugun">
+        <option value="">시 / 군 / 구를 선택하세요</option>
+      </select>
+
+      <label>은행</label>
+      <select id="bank">
+        <option value="">은행을 선택하세요</option>
+      </select>
+
+      <button id="searchBtn">찾기</button>
+    </div>
+
+    <div id="map"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+const sidoSelect = document.querySelector('#sido')
+const gugunSelect = document.querySelector('#gugun')
+const bankSelect = document.querySelector('#bank')
+
+let mapInfo = []
+let bankInfo = []
+
+let map
+let ps
+let markers = []
+
+let polyline = null
+
+const START_X = 127.039685
+const START_Y = 37.5012743
+
+function removeMarkers() {
+
+  markers.forEach(marker => {
+    marker.setMap(null)
+  })
+
+  markers = []
+
+  if (polyline) {
+    polyline.setMap(null)
+    polyline = null
+  }
+}
+
+fetch('./data/data.json')
+  .then(res => res.json())
+  .then(data => {
+
+    mapInfo = data.mapInfo
+    bankInfo = data.bankInfo
+
+    mapInfo.forEach(item => {
+
+      const option =
+        document.createElement('option')
+
+      option.value = item.name
+      option.textContent = item.name
+
+      sidoSelect.appendChild(option)
+    })
+
+    bankInfo.forEach(bank => {
+
+      const option =
+        document.createElement('option')
+
+      option.value = bank
+      option.textContent = bank
+
+      bankSelect.appendChild(option)
+    })
+  })
+
+sidoSelect.addEventListener('change', () => {
+
+  gugunSelect.innerHTML =
+    '<option value="">시 / 군 / 구를 선택하세요</option>'
+
+  const selected =
+    mapInfo.find(
+      item => item.name === sidoSelect.value
+    )
+
+  if (!selected) return
+
+  selected.countries.forEach(country => {
+
+    const option =
+      document.createElement('option')
+
+    option.value = country
+    option.textContent = country
+
+    gugunSelect.appendChild(option)
+  })
+})
+
+const script =
+  document.createElement('script')
+
+script.src =
+  `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${window.JS_KEY}&autoload=false&libraries=services`
+
+document.head.appendChild(script)
+
+script.onload = () => {
+
+  kakao.maps.load(() => {
+
+    const container =
+      document.querySelector('#map')
+
+    const options = {
+      center:
+        new kakao.maps.LatLng(
+          START_Y,
+          START_X
+        ),
+      level: 5
+    }
+
+    map =
+      new kakao.maps.Map(
+        container,
+        options
+      )
+
+    const startMarker =
+      new kakao.maps.Marker({
+        map,
+        position:
+          new kakao.maps.LatLng(
+            START_Y,
+            START_X
+          )
+      })
+
+    const startInfo =
+      new kakao.maps.InfoWindow({
+        content:
+          '<div style="padding:5px;">멀티캠퍼스</div>'
+      })
+
+    startInfo.open(
+      map,
+      startMarker
+    )
+
+    ps =
+      new kakao.maps.services.Places()
+
+    document
+      .querySelector('#searchBtn')
+      .addEventListener(
+        'click',
+        searchBank
+      )
+  })
+}
+
+function searchBank() {
+
+  if (
+    !sidoSelect.value ||
+    !gugunSelect.value ||
+    !bankSelect.value
+  ) {
+    alert('모든 항목을 선택하세요.')
+    return
+  }
+
+  removeMarkers()
+
+  const keyword =
+    `${sidoSelect.value} ${gugunSelect.value} ${bankSelect.value}`
+
+  ps.keywordSearch(
+    keyword,
+    placesSearchCB
+  )
+}
+
+function placesSearchCB(
+  data,
+  status
+) {
+
+  if (
+    status !==
+    kakao.maps.services.Status.OK
+  ) {
+    alert('검색 결과가 없습니다.')
+    return
+  }
+
+  const bounds =
+    new kakao.maps.LatLngBounds()
+
+  data.forEach(place => {
+
+    const position =
+      new kakao.maps.LatLng(
+        place.y,
+        place.x
+      )
+
+    const marker =
+      new kakao.maps.Marker({
+        map,
+        position
+      })
+
+    markers.push(marker)
+
+    bounds.extend(position)
+
+    const infowindow =
+      new kakao.maps.InfoWindow({
+        content: `
+          <div style="padding:5px;">
+            <strong>${place.place_name}</strong>
+            <br>
+            ${place.address_name}
+          </div>
+        `
+      })
+
+    kakao.maps.event.addListener(
+      marker,
+      'click',
+      async () => {
+
+        infowindow.open(
+          map,
+          marker
+        )
+
+        await drawRoute(
+          place.x,
+          place.y
+        )
+      }
+    )
+  })
+
+  map.setBounds(bounds)
+}
+
+async function drawRoute(
+  destX,
+  destY
+) {
+
+  try {
+
+    if (polyline) {
+      polyline.setMap(null)
+    }
+
+    const url =
+      `https://apis-navi.kakaomobility.com/v1/directions?origin=${START_X},${START_Y}&destination=${destX},${destY}`
+
+    const response =
+      await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization:
+            `KakaoAK ${window.MOBILITY_KEY}`
+        }
+      })
+
+    const result =
+      await response.json()
+
+    const linePath = []
+
+    result.routes[0]
+      .sections[0]
+      .roads
+      .forEach(road => {
+
+        const vertexes =
+          road.vertexes
+
+        for (
+          let i = 0;
+          i < vertexes.length;
+          i += 2
+        ) {
+
+          linePath.push(
+            new kakao.maps.LatLng(
+              vertexes[i + 1],
+              vertexes[i]
+            )
+          )
+        }
+      })
+
+    polyline =
+      new kakao.maps.Polyline({
+        path: linePath,
+        strokeWeight: 5,
+        strokeColor: '#ff0000',
+        strokeOpacity: 0.8,
+        strokeStyle: 'solid'
+      })
+
+    polyline.setMap(map)
+
+  } catch (error) {
+
+    console.error(error)
+    alert('경로 탐색 실패')
+  }
+}
+
+</script>
+
+</body>
+</html>
