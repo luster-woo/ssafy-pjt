@@ -1,0 +1,102 @@
+[
+    {
+        "fin_prdt_cd": "DUMMY-001",
+        "kor_co_nm": "은하은행",
+        "fin_prdt_nm": "청년 도약 우대 정기예금",
+        "etc_note": "만 19세~34세 대상의 우대상품으로 자동이체 시 금리 0.15%p 추가 우대. 1년 이상 예치 권장.",
+        "join_deny": 1,
+        "join_member": "만 19세 이상 34세 이하의 성인",
+        "join_way": "스마트폰",
+        "spcl_cnd": "자동이체 시 금리 우대 0.15%p; 최소 예치금 100만원"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-002",
+        "kor_co_nm": "바다은행",
+        "fin_prdt_nm": "직장인 안정형 정기예금",
+        "etc_note": "1년 또는 2년 중 선택 가능. 자동이체 시 금리 0.10%p 우대. 안정적 수익 추구 고객 대상.",
+        "join_deny": 1,
+        "join_member": "직장인 또는 재직자",
+        "join_way": "인터넷",
+        "spcl_cnd": "거치기간 1년 이상 시 추가 우대 0.10%p"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-003",
+        "kor_co_nm": "산호은행",
+        "fin_prdt_nm": "가족사랑 자동이체 우대 정기예금",
+        "etc_note": "가족계좌 연계 시 금리 추가 우대. 1년 이상 예치 권장.",
+        "join_deny": 2,
+        "join_member": "가정주부 및 가족 구성원",
+        "join_way": "영업점",
+        "spcl_cnd": "가족계좌 연계 자동이체 시 0.25%p 우대"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-004",
+        "kor_co_nm": "미래은행",
+        "fin_prdt_nm": "온라인거래 전용 성장형 정기예금",
+        "etc_note": "온라인 전용 상품으로 신규고객 대상. 금리 0.20%p 우대.",
+        "join_deny": 1,
+        "join_member": "모든 성인",
+        "join_way": "인터넷",
+        "spcl_cnd": "온라인 신규설정 시 금리 우대 0.20%p"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-005",
+        "kor_co_nm": "별빛은행",
+        "fin_prdt_nm": "장기보장형 2년 정기예금",
+        "etc_note": "2년 만기 고정금리. 안정적 수익과 만기자금 확보에 적합.",
+        "join_deny": 3,
+        "join_member": "연금저축자 및 35세 이상 직장인",
+        "join_way": "스마트폰",
+        "spcl_cnd": "2년 만기까지 자동이체 필수"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-006",
+        "kor_co_nm": "청운은행",
+        "fin_prdt_nm": "소액고객 우대 1년 정기예금",
+        "etc_note": "최소 예치금 100만원 이상 시 금리 우대. 유입이 큰 고객 대상.",
+        "join_deny": 1,
+        "join_member": "만 19세 이상 모든 고객",
+        "join_way": "인터넷",
+        "spcl_cnd": "100만원 이상 시 우대 금리"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-007",
+        "kor_co_nm": "대양은행",
+        "fin_prdt_nm": "중소기업임직원 전용 2년 정기예금",
+        "etc_note": "기업 제휴를 통한 임직원 우대 금리 제공. 2년 만기.",
+        "join_deny": 3,
+        "join_member": "중소기업 임직원",
+        "join_way": "영업점",
+        "spcl_cnd": "기업 제휴 증빙 필요"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-008",
+        "kor_co_nm": "해돋은행",
+        "fin_prdt_nm": "장기안정형 3년 정기예금",
+        "etc_note": "3년 만기 고정금리. 안정적 자금 운용을 선호하는 고객 대상.",
+        "join_deny": 1,
+        "join_member": "모든 성인",
+        "join_way": "스마트폰",
+        "spcl_cnd": "3년 유지 시 금리 우대"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-009",
+        "kor_co_nm": "도시은행",
+        "fin_prdt_nm": "자유적금 연계 정기예금",
+        "etc_note": "자유적금과의 연계 시 금리 우대. 예치금액에 따라 차등 적용.",
+        "join_deny": 1,
+        "join_member": "모든 성인",
+        "join_way": "인터넷",
+        "spcl_cnd": "자유적금 연계 우대 금리"
+    },
+    {
+        "fin_prdt_cd": "DUMMY-010",
+        "kor_co_nm": "무지개은행",
+        "fin_prdt_nm": "다채로운 혜택 무지개 정기예금 2년",
+        "etc_note": "다양한 연령대를 위한 금리 우대 조합. 2년 만기 고정.",
+        "join_deny": 1,
+        "join_member": "다양한 연령대의 고객",
+        "join_way": "영업점",
+        "spcl_cnd": "연계상품 여부에 따라 금리 차등 적용"
+    }
+]

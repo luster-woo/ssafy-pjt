@@ -1,0 +1,120 @@
+{% extends "community/base.html" %}
+
+{% block title %}내 프로필{% endblock %}
+
+{% block extra_css %}
+<style>
+  .profile-box {
+    background: #f8fbff;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #e6eef7;
+  }
+
+  .profile-box img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .profile-meta {
+    display: grid;
+    gap: 12px;
+  }
+
+  .profile-meta strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .stock-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stock-tags span {
+    background: #edf7f6;
+    color: var(--primary-dark);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .profile-posts {
+    display: grid;
+    gap: 14px;
+  }
+
+  .profile-posts article {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .profile-posts h3 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <p class="breadcrumb"><a href="{% url 'community:asset_list' %}">자산 목록</a> &gt; 프로필</p>
+  <h1 class="page-title">내 프로필</h1>
+
+  <section class="profile-box">
+    {% if profile_user.profile_image %}
+      <img src="{{ profile_user.profile_image.url }}" alt="{{ profile_user.nickname }}">
+    {% else %}
+      <div class="muted" style="margin-bottom: 16px;">프로필 이미지가 없습니다.</div>
+    {% endif %}
+
+    <div class="profile-meta">
+      <div>
+        <strong>아이디</strong>
+        <div>{{ profile_user.username }}</div>
+      </div>
+      <div>
+        <strong>닉네임</strong>
+        <div>{{ profile_user.nickname }}</div>
+      </div>
+      <div>
+        <strong>관심 종목</strong>
+        {% if interest_stock_names %}
+          <div class="stock-tags">
+            {% for stock in interest_stock_names %}
+              <span>{{ stock }}</span>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div>-</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <div class="divider btn-row">
+    <a href="{% url 'community:password_change' %}" class="btn">비밀번호 수정</a>
+    <a href="{% url 'community:profile_analysis' %}" class="btn btn-secondary">투자 성향 분석 보기</a>
+  </div>
+
+  <section class="divider">
+    <h2 class="section-title">내가 작성한 게시글</h2>
+    <div class="profile-posts">
+      {% for post in posts %}
+        <article>
+          <h3><a href="{% url 'community:post_detail' post.asset_id post.id %}">{{ post.title }}</a></h3>
+          <div class="muted">{{ post.asset_name }} · {{ post.created_at|date:"Y-m-d H:i" }}</div>
+        </article>
+      {% empty %}
+        <p class="muted">작성한 게시글이 없습니다.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

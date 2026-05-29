@@ -1,0 +1,58 @@
+{% extends "community/base.html" %}
+
+{% block title %}{{ asset.name }} 게시판{% endblock %}
+
+{% block extra_css %}
+<style>
+  .board-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .post-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .post-item {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+
+  .post-item h2 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <p class="breadcrumb"><a href="{% url 'community:asset_list' %}">자산 목록</a> &gt; {{ asset.name }}</p>
+
+  <div class="board-head">
+    <div>
+      <h1 class="page-title">{{ asset.name }}</h1>
+      <p class="muted">{{ asset.description }}</p>
+    </div>
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'community:post_create' asset.id %}" class="btn">글쓰기</a>
+    {% else %}
+      <a href="{% url 'community:login' %}?next={% url 'community:post_create' asset.id %}" class="btn">글쓰기</a>
+    {% endif %}
+  </div>
+
+  <section class="post-list">
+    {% for post in posts %}
+      <article class="post-item">
+        <h2><a href="{% url 'community:post_detail' asset.id post.id %}">{{ post.title }}</a></h2>
+        <div class="muted">{{ post.author }} · {{ post.created_at|date:"Y-m-d H:i" }}</div>
+      </article>
+    {% empty %}
+      <p class="muted">아직 등록된 게시글이 없습니다. 첫 글을 작성해 보세요.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

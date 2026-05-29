@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}금융 자산 커뮤니티{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --line: #d8e2ef;
+      --text: #102542;
+      --muted: #6d7f98;
+      --primary: #159a95;
+      --primary-dark: #117d79;
+      --secondary: #7486a0;
+      --secondary-dark: #5d708e;
+      --danger: #e13131;
+      --danger-dark: #be2323;
+      --shadow: 0 8px 20px rgba(16, 37, 66, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .site-header {
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    .site-header__inner,
+    .page-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header__inner {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em;
+    }
+
+    .brand span {
+      font-size: 1.75rem;
+      margin-right: 8px;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .site-nav a,
+    .site-nav button {
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      background: none;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .site-nav .nav-button {
+      background: var(--secondary);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+    }
+
+    .site-nav .nav-button:hover {
+      background: var(--secondary-dark);
+    }
+
+    .page-shell {
+      padding-top: 22px;
+      padding-bottom: 36px;
+    }
+
+    .message-list {
+      list-style: none;
+      margin: 0 0 16px;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .message {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      color: var(--text);
+    }
+
+    .message.error {
+      border-left-color: var(--danger);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .breadcrumb {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .breadcrumb a {
+      color: var(--muted);
+    }
+
+    .page-title {
+      margin: 0 0 18px;
+      font-size: 2.1rem;
+      line-height: 1.15;
+      letter-spacing: -0.05em;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 1.7rem;
+      letter-spacing: -0.04em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .divider {
+      border-top: 1px solid var(--line);
+      margin: 22px 0 0;
+      padding-top: 22px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn,
+    button.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 9px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .btn:hover { background: var(--primary-dark); }
+
+    .btn-secondary,
+    button.btn-secondary {
+      background: var(--secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-dark);
+    }
+
+    .btn-danger,
+    button.btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-dark);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      max-width: 420px;
+      padding: 12px 14px;
+      border: 1px solid #cfd9e6;
+      border-radius: 8px;
+      font: inherit;
+      background: #fff;
+    }
+
+    textarea {
+      max-width: 100%;
+      min-height: 220px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21, 154, 149, 0.15);
+    }
+
+    .field-group {
+      margin-bottom: 22px;
+    }
+
+    .field-errors,
+    .form-errors {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      color: var(--danger);
+      font-size: 0.95rem;
+    }
+
+    .help-text {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 720px) {
+      .site-header__inner {
+        padding-top: 14px;
+        padding-bottom: 14px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .site-nav {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 14px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .page-shell {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="{% url 'community:asset_list' %}" class="brand"><span>🏦</span>금융 자산 커뮤니티</a>
+      <nav class="site-nav">
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'community:profile' %}">프로필</a>
+          <a href="{% url 'community:profile_analysis' %}">투자 성향 분석</a>
+          <a href="{% url 'community:password_change' %}">비밀번호 수정</a>
+          <form action="{% url 'community:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="nav-button">로그아웃</button>
+          </form>
+        {% else %}
+          <a href="{% url 'community:login' %}">로그인</a>
+          <a href="{% url 'community:signup' %}">회원가입</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    {% if messages %}
+      <ul class="message-list">
+        {% for message in messages %}
+          <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="card">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

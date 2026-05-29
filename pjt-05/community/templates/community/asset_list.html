@@ -1,0 +1,70 @@
+{% extends "community/base.html" %}
+
+{% block title %}금융 자산 목록{% endblock %}
+
+{% block extra_css %}
+<style>
+  .asset-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .asset-item {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .asset-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: #bdd5ee;
+  }
+
+  .asset-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .asset-title {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #edf7f6;
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">금융 자산 목록</h1>
+  <p class="muted">자산을 선택하면 해당 자산 전용 게시판으로 이동합니다.</p>
+
+  <section class="asset-grid">
+    {% for asset in assets %}
+      <article class="asset-item">
+        <div class="asset-top">
+          <div>
+            <h2 class="asset-title"><a href="{% url 'community:board' asset.id %}">{{ asset.name }}</a></h2>
+            <div class="muted">{{ asset.category }}</div>
+          </div>
+          <span class="badge">위험도 {{ asset.risk_level }}</span>
+        </div>
+        <p class="muted">{{ asset.description }}</p>
+      </article>
+    {% empty %}
+      <p>표시할 자산 정보가 없습니다.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

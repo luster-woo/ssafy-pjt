@@ -1,0 +1,46 @@
+{% extends "community/base.html" %}
+
+{% block title %}투자 성향 분석{% endblock %}
+
+{% block extra_css %}
+<style>
+  .analysis-summary {
+    display: grid;
+    gap: 12px;
+  }
+
+  .analysis-box {
+    white-space: pre-wrap;
+    line-height: 1.7;
+    background: #f8fbff;
+    border: 1px solid #e6eef7;
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .analysis-meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <p class="breadcrumb"><a href="{% url 'community:asset_list' %}">자산 목록</a> &gt; <a href="{% url 'community:profile' %}">프로필</a> &gt; 투자 성향 분석</p>
+  <h1 class="page-title">투자 성향 분석</h1>
+
+  <section class="analysis-summary">
+    <div class="analysis-meta">분석 대상 게시글 수: {{ post_count }}개</div>
+
+    {% if analysis_result.ok %}
+      <div class="analysis-meta">사용 모델: {{ analysis_result.model }}</div>
+      <div class="analysis-box">{{ analysis_result.content }}</div>
+    {% else %}
+      <div class="analysis-box">{{ analysis_result.message }}</div>
+    {% endif %}
+  </section>
+
+  <div class="divider btn-row">
+    <a href="{% url 'community:profile' %}" class="btn btn-secondary">프로필로 돌아가기</a>
+  </div>
+{% endblock %}

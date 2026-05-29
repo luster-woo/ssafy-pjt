@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="fw-bold mb-3">메인 페이지</h1>
+  <hr>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for movie in movies %}
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        
+        <div class="card-header bg-light">
+          <h5 class="card-title fw-bold mb-0">{{ movie.title }}</h5>
+        </div>
+
+        <div class="card-body">
+          <p class="card-text text-secondary" style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ movie.content }}
+          </p>
+          
+          <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-primary btn-sm">Detail</a>
+        </div>
+        
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "community/base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+  <p class="breadcrumb">
+    <a href="{% url 'community:asset_list' %}">자산 목록</a> &gt;
+    <a href="{% url 'community:board' asset.id %}">{{ asset.name }}</a> &gt; 글 보기
+  </p>
+
+  <article>
+    <h1 class="page-title">{{ post.title }}</h1>
+    <p class="muted">{{ post.author }} · {{ post.created_at|date:"Y-m-d H:i" }}</p>
+
+    <div class="divider">
+      <p style="white-space: pre-wrap;">{{ post.content }}</p>
+    </div>
+  </article>
+
+  <div class="divider btn-row">
+    <a href="{% url 'community:board' asset.id %}" class="btn btn-secondary">목록으로</a>
+    {% if is_author %}
+      <a href="{% url 'community:post_update' asset.id post.id %}" class="btn">수정</a>
+      <form action="{% url 'community:post_delete' asset.id post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('게시글을 삭제하시겠습니까?');">삭제</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SSAFY 챗봇</title>
+    <style>
+        /* 명세서 스타일 느낌 내기 */
+        body { font-family: sans-serif; background: #fafafa; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #chat-container { width: 450px; height: 600px; border: 1px solid #ccc; background: #fff; display: flex; flex-direction: column; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        #chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 70%; padding: 10px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
+        .user { align-self: flex-end; background: #e3f2fd; color: #000; border-bottom-right-radius: 2px; }
+        .bot { align-self: flex-start; background: #f5f5f5; color: #333; border-bottom-left-radius: 2px; }
+        .error { align-self: flex-start; background: #ffebee; color: #c62828; font-weight: bold; }
+        
+        /* F104 필수: 상태창 및 로딩 애니메이션 스타일 */
+        #status-area { display: none; align-self: flex-start; padding: 10px; font-size: 13px; color: #666; }
+        .spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid #ccc; border-top: 2px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 5px; vertical-align: middle; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #input-area { display: flex; border-top: 1px solid #ddd; padding: 10px; }
+        #user-input { flex: 1; border: none; outline: none; padding: 8px; font-size: 14px; }
+        #send-btn { background: #007bff; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-box">
+        </div>
+    
+    <div id="status-area">
+        <span class="spinner"></span><span id="status-text">부적절한 질문인지 판단 중...</span>
+    </div>
+    
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Send a message...">
+        <button id="send-btn" onclick="sendMessage()">전송</button>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const statusArea = document.getElementById('status-area');
+    const statusText = document.getElementById('status-text');
+    const userInput = document.getElementById('user-input');
+
+    // 5번째 파라미터로 audioData 추가!
+    function appendMessage(sender, text, isError = false, imageUrl = null, audioData = null) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${sender} ${isError ? 'error' : ''}`;
+        
+        if (imageUrl) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = "100%";
+            img.style.borderRadius = "8px";
+            img.style.marginTop = "5px";
+            msgDiv.appendChild(img);
+        } else if (audioData) {
+            // [F110] 오디오 데이터가 들어오면 <audio> 태그 생성
+            const audio = document.createElement('audio');
+            audio.controls = true; // 재생, 정지 버튼 보이게
+            audio.src = `data:audio/mp3;base64,${audioData}`; // 백엔드가 준 데이터를 소스로 연결
+            audio.style.marginTop = "5px";
+            audio.style.maxWidth = "100%";
+            msgDiv.appendChild(audio);
+        } else {
+            msgDiv.innerText = text;
+        }
+        
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const prompt = userInput.value.trim();
+        if (!prompt) return;
+
+        appendMessage('user', prompt);
+        userInput.value = '';
+
+        statusArea.style.display = 'block';
+        statusText.innerText = '부적절한 질문인지 판단 중...';
+
+        try {
+            // 1. 가드레일(F102) 검사
+            const gdRes = await fetch('/api/v1/chat/guardrail/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "prompt": prompt })
+            });
+            const gdData = await gdRes.json();
+
+            if (gdRes.status === 403 || gdData.result === false) {
+                statusArea.style.display = 'none';
+                appendMessage('error', `적절한 질문이 아닙니다. (사유: ${gdData.reason})`);
+                return; 
+            }
+
+            // 2. 이미지(F105), 음성(F110), 텍스트(F103) 라우팅 분기
+            if (prompt.includes("그려줘") || prompt.includes("사진") || prompt.includes("이미지")) {
+                // 이미지 생성 로직
+                statusText.innerText = '이미지 생성 중...';
+                
+                const imgRes = await fetch('/api/v1/images/generations/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "prompt": prompt })
+                });
+                const imgData = await imgRes.json();
+                
+                statusArea.style.display = 'none';
+                appendMessage('bot', '', false, imgData.url, null);
+
+            } else if (prompt.includes("읽어줘") || prompt.includes("말해줘") || prompt.includes("음성")) {
+                // [F110 추가!] 음성 생성 로직
+                statusText.innerText = '음성 생성 중...';
+                
+                const ttsRes = await fetch('/api/v1/generate-speech/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "text": prompt }) // 백엔드 요청 규격에 맞춤
+                });
+                const ttsData = await ttsRes.json();
+                
+                statusArea.style.display = 'none';
+                // 5번째 인자에 오디오 데이터를 넘깁니다!
+                appendMessage('bot', '', false, null, ttsData.audio_data);
+
+            } else {
+                // 3. 일반 텍스트 대화(F103) 및 점수 채점(F106)
+                statusText.innerText = '답변 생성 중...';
+                
+                const chatRes = await fetch('/api/v1/chat/completions/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "messages": [{ "role": "user", "content": prompt }] })
+                });
+                const chatData = await chatRes.json();
+                
+                statusText.innerText = '답변 채점 중...';
+                
+                const scoreRes = await fetch('/api/v1/chat/score/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "messages": [{ "role": "user", "content": prompt }], 
+                        "answer": chatData.content
+                    })
+                });
+                const scoreData = await scoreRes.json();
+                
+                statusArea.style.display = 'none';
+                
+                const finalMessage = `${chatData.content}\n\n[답변 적합도 점수: ${scoreData.score}/100]\n이유: ${scoreData.reason}`;
+                appendMessage('bot', finalMessage);
+            }
+
+        } catch (err) {
+            statusArea.style.display = 'none';
+            appendMessage('error', '통신 중 에러가 발생했습니다.');
+            console.error(err);
+        }
+    }
+</script>
+</body>
+</html>

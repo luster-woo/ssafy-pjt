@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>프로필 페이지</title>
+<style>
+.profile-img{
+width:200px;
+height:200px;
+object-fit:cover;
+border-radius:50%;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+.card-box{
+padding:40px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+background:white;
+}
+</style>
+</head>
+
+<body class="bg-light">
+
+<div class="bg-success text-white text-center py-3">
+<h5 class="m-0">ssafy님의 프로필 페이지</h5>
+</div>
+
+<div class="container text-center mt-3">
+<ul class="nav nav-tabs justify-content-center">
+<li class="nav-item">
+<a class="nav-link active" href="#" onclick="showPage('info')">기본 정보 수정</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="#" onclick="showPage('portfolio')">포트폴리오 수정</a>
+</li>
+</ul>
+</div>
+
+<div class="container mt-4">
+
+<div id="infoPage">
+<div class="card-box">
+<h3 class="text-center mb-4">기본 정보 수정</h3>
+<div class="row">
+<div class="col-md-5 text-center">
+<p>프로필사진</p>
+<img src="C:\Users\SSAFY\Desktop\pjt-03\프로필사진.jpg" class="profile-img">
+<div class="mt-4">
+<label class="form-label">자기소개</label>
+<textarea class="form-control" rows="3"></textarea>
+<button class="btn btn-info mt-2">Update</button>
+</div>
+</div>
+<div class="col-md-7">
+<p><b>투자상품 선호도</b></p>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">주식</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">채권</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">부동산</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">가상화폐</label>
+</div>
+<hr>
+<p><b>투자스타일</b></p>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="style">
+<label class="form-check-label">안정형</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="style">
+<label class="form-check-label">공격형</label>
+</div>
+<hr>
+<p><b>관심 종목</b></p>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">정보기술</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">원자재</label>
+</div>
+<div class="form-check form-check-inline">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">금융</label>
+</div>
+</div>
+</div>
+<hr class="mt-5">
+<h4 class="mb-4">회원정보</h4>
+<form>
+<div class="mb-3">
+<label class="form-label">회원번호</label>
+<input type="text" class="form-control" value="1" readonly>
+</div>
+<div class="mb-3">
+<label class="form-label">ID</label>
+<input type="text" class="form-control" value="ssafy" readonly>
+</div>
+<div class="mb-3">
+<label class="form-label">Email</label>
+<div class="input-group">
+<input type="email" class="form-control" placeholder="이메일을 입력하세요">
+<button class="btn btn-info">Update</button>
+</div>
+</div>
+<div class="mb-3">
+<label class="form-label">Nickname</label>
+<div class="input-group">
+<input type="text" class="form-control" placeholder="닉네임을 입력하세요">
+<button class="btn btn-info">Update</button>
+</div>
+</div>
+<div class="mb-3">
+<label class="form-label">나이</label>
+<div class="input-group">
+<input type="number" class="form-control" placeholder="나이를 입력하세요">
+<button class="btn btn-info">Update</button>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<label class="form-label">자산</label>
+<div class="input-group">
+<span class="input-group-text">$</span>
+<input type="number" class="form-control" placeholder="현재 자산을 입력해주세요">
+<button class="btn btn-info">Update</button>
+</div>
+</div>
+<div class="col-md-6">
+<label class="form-label">연봉</label>
+<div class="input-group">
+<span class="input-group-text">$</span>
+<input type="number" class="form-control" placeholder="연봉을 입력해주세요">
+<button class="btn btn-info">Update</button>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<div id="portfolioPage" style="display:none;">
+    <div class="card-box">
+        <h3 class="text-center mb-4">포트폴리오 수정</h3>
+        <form>
+            <div class="mb-3">
+                <label class="form-label">회원번호</label>
+                <input type="text" class="form-control bg-light" value="1" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                <input type="text" class="form-control bg-light" value="ssafy" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">저축 성향</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="save" id="save1">
+                            <label class="form-check-label" for="save1">도전형</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="save" id="save2">
+                            <label class="form-check-label" for="save2">검소형</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="save" id="save3">
+                            <label class="form-check-label" for="save3">알뜰형</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info text-white">Update</button>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">최애 은행</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="가장 좋아하는 은행을 입력해주세요">
+                    <button class="btn btn-info text-white" type="button">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
+
+<script>
+function showPage(page){
+document.getElementById("infoPage").style.display="none";
+document.getElementById("portfolioPage").style.display="none";
+
+document.querySelectorAll(".nav-link").forEach(el=>{
+el.classList.remove("active")
+})
+
+if(page==="info"){
+document.getElementById("infoPage").style.display="block";
+document.querySelectorAll(".nav-link")[0].classList.add("active")
+}
+
+if(page==="portfolio"){
+document.getElementById("portfolioPage").style.display="block";
+document.querySelectorAll(".nav-link")[1].classList.add("active")
+}
+}
+</script>
+
+</body>
+</html>

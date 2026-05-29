@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="fw-bold mt-3">영화 수정 페이지</h1>
+  
+  <form action="{% url 'movies:update' movie.pk %}" method="POST" class="mt-4">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      {{ form.as_p }}
+    </div>
+
+    <div class="mt-3">
+      <input type="submit" value="제출" class="btn btn-light border shadow-sm px-3">
+    </div>
+  </form>
+{% endblock content %}

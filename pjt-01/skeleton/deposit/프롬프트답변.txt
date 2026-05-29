@@ -1,0 +1,118 @@
+1️⃣ 금융상품통합비교공시 API 개요
+
+금융상품통합비교공시 API는 금융감독원이 제공하는 공공 API로,
+은행·금융기관에서 판매 중인 예금, 적금, 대출 등의 금융상품 정보를
+프로그램을 통해 조회할 수 있도록 지원한다.
+
+이 API를 사용하면 다음과 같은 정보를 확인할 수 있다.
+
+정기예금 / 적금 상품 목록
+
+상품 기본 정보 (금융회사명, 상품명 등)
+
+금리 정보 (기본금리, 최고우대금리)
+
+가입 기간, 금리 유형 등 옵션 정보
+
+API의 응답 데이터는 JSON 형식으로 제공되며,
+상위 구조는 result 키 아래에 실제 데이터가 포함되는 구조를 가진다.
+
+2️⃣ 적금 상품 조회 API 설명
+📌 요청 URL 형식
+http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json
+
+📌 주요 요청 파라미터
+파라미터	설명
+auth	발급받은 API 인증키
+topFinGrpNo	금융권 코드 (020000 = 은행)
+pageNo	페이지 번호
+📌 응답 데이터 주요 구성
+
+result
+→ 실제 응답 데이터가 담겨 있는 최상위 키
+
+baseList
+→ 적금 상품의 기본 정보
+(금융회사명, 상품명, 금융상품 코드 등)
+
+optionList
+→ 적금 상품의 금리 및 기간 정보
+(저축 기간, 금리 유형, 기본금리, 최고우대금리 등)
+
+3️⃣ AI 설명과 공식 문서 비교 및 검증
+① AI 설명
+
+optionList에는 각 상품의 금리 정보가 포함되어 있다.
+
+② 공식 문서 설명
+
+optionList에는 금융상품 코드별로 저축 기간, 금리 유형,
+기본금리(intr_rate), 최고우대금리(intr_rate2) 정보가 제공된다.
+
+③ 수정된 정확한 설명
+
+optionList는 단순 금리 목록이 아니라,
+금융상품 코드(fin_prdt_cd)를 기준으로 여러 가입 조건별 금리 옵션을 제공하는 데이터이다.
+
+4️⃣ 금융상품 관련 질문에 대한 정답
+❓ 질문
+
+“금리가 가장 높은 적금 상품을 가져오려면 어떻게 해야 하나요?”
+
+✅ 사용해야 하는 API
+
+적금 상품 조회 API
+(savingProductsSearch.json)
+
+✅ 처리 방법 설명
+
+적금 상품 조회 API 요청
+
+응답 데이터에서 optionList 추출
+
+intr_rate2(최고우대금리) 기준으로 비교
+
+가장 높은 금리를 가진 상품의 금융상품 코드 확인
+
+해당 코드에 맞는 상품 정보를 baseList에서 매칭
+
+✅ 요청 URL 예시
+http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth=API_KEY&topFinGrpNo=020000&pageNo=1
+
+✅ 예상 결과 예시
+
+금융회사명: ○○은행
+
+상품명: ○○적금
+
+가입기간: 12개월
+
+최고우대금리: 5.0%
+
+5️⃣ 예제 코드 (Python)
+import requests
+
+API_URL = "http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json"
+params = {
+    "auth": "YOUR_API_KEY",
+    "topFinGrpNo": "020000",
+    "pageNo": 1
+}
+
+response = requests.get(API_URL, params=params)
+data = response.json()
+
+option_list = data["result"]["optionList"]
+
+max_product = max(option_list, key=lambda x: x["intr_rate2"])
+
+print("최고 금리:", max_product["intr_rate2"])
+print("상품 코드:", max_product["fin_prdt_cd"])
+
+✅ 정리
+
+금융상품통합비교공시 API는 금융상품 비교를 자동화할 수 있는 공공 API이다.
+
+금리 비교는 optionList의 최고우대금리(intr_rate2) 를 기준으로 해야 한다.
+
+baseList와 optionList는 금융상품 코드로 매칭해야 정확한 정보 추출이 가능하다.
