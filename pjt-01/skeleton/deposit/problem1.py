@@ -5,7 +5,7 @@ import requests
 # result 안에 포함된 key 값들만 출력하는 함수
 def get_deposit_products():
     # 금융상품통합비교공시 API 인증키
-    api_key = "f3f8b4d34b3c320a901179255b58ce3b"
+    api_key = ""
 
     # 정기예금 상품 조회 API 엔드포인트
     API_URL = "http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json"
