@@ -46,7 +46,7 @@ def get_result(api_key):
 
 
 # 여러분의 OpenWeatherMap API 키를 설정하세요
-api_key = 'b9c6e987ebd2b20bf844cecae3704cb0'
+api_key = ''
 
 # 아래 코드는 수정하지 않습니다.
 if __name__ == '__main__':
