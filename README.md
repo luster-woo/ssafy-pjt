@@ -1,20 +1,10 @@
-# 🏫 SSAFY 15기 관통 프로젝트
+# ssafy-pjt
 
-[![SSAFY](https://img.shields.io/badge/SSAFY-15기%20구미-blue?style=flat-square)](https://www.ssafy.com)
-[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
-[![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white)](https://www.djangoproject.com)
-[![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=vue.js&logoColor=white)](https://vuejs.org)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/ko/docs/Web/JavaScript)
+SSAFY 15기 1학기에 주마다 진행한 관통 프로젝트 기록입니다. Python 기초에서 시작해 데이터 분석, Django, REST API, Vue.js까지 프로젝트마다 다루는 기술이 하나씩 늘어납니다. 이 과정의 마지막 프로젝트가 [FinFit](https://github.com/luster-woo/finance_pjt)입니다.
 
-SSAFY 15기 과정에서 진행한 관통 프로젝트 기록입니다.  
-Python 기초부터 시작해 데이터 분석, Django 풀스택, REST API, Vue.js SPA까지  
-매 프로젝트마다 기술 스택을 확장해가며 성장한 과정을 담고 있습니다.
+각 프로젝트는 2인 페어로 진행했습니다. 폴더 안의 회고 README 가운데 `yw`·`yun`이 붙은 것이 제가 쓴 것이고, 다른 이름(`sb`·`jw`·`jin`·`jinung`)이 붙은 README는 페어의 회고입니다.
 
-> 각 프로젝트는 2인 페어로 진행했습니다. 폴더별 회고 README는 제가 작성했고, 다른 이름(`sb`·`jw`·`jin`)이 붙은 README는 페어의 회고입니다.
-
----
-
-## 📂 프로젝트 목록
+## 프로젝트 목록
 
 | # | 프로젝트 | 핵심 기술 | 설명 |
 |:---:|:---|:---|:---|
@@ -30,9 +20,9 @@ Python 기초부터 시작해 데이터 분석, Django 풀스택, REST API, Vue.
 | 10 | 은행 위치 지도 서비스 | `JavaScript` `Kakao Map API` | 카카오맵 API 연동, 마커 표시 및 경로 시각화 |
 | 12 | 관심 종목 영상 검색 서비스 | `Vue 3` `YouTube API` | Vue Router 기반 SPA, 키워드 명령 입력으로 유튜브 영상 검색·저장 |
 
----
+07번은 회고만 있고 코드는 없습니다. 11번은 이 저장소에 코드가 올라가 있지 않아 목록에서 뺐습니다. API 키는 저장소에 넣지 않았고, 실행하려면 각 프로젝트의 설정 파일이나 `.env`에 본인 키를 넣어야 합니다.
 
-## 🛠 기술 스택
+## 기술 스택
 
 | 분류 | 기술 |
 |:---:|:---|
@@ -44,9 +34,7 @@ Python 기초부터 시작해 데이터 분석, Django 풀스택, REST API, Vue.
 | External API | 금융감독원 Open API, Kakao Local API, Kakao Map API, YouTube Data API |
 | DB | SQLite |
 
----
-
-## 📈 성장 흐름
+## 진행 순서
 
 ```
 Python 기초 · 프롬프팅
